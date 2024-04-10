@@ -171,3 +171,7 @@ Python/frozen_modules/MANIFEST
 
 # main branch only: ABI files are not checked/maintained.
 Doc/data/python*.abi
+
+# PyAwaitable Module Testing
+mod/build/
+mod/meth_async.egg-info
