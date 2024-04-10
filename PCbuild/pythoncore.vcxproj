@@ -485,6 +485,7 @@
     <ClCompile Include="..\Modules\cjkcodecs\multibytecodec.c" />
     <ClCompile Include="..\Modules\_winapi.c" />
     <ClCompile Include="..\Objects\abstract.c" />
+    <ClCompile Include="..\Objects\awaitableobject.c" />
     <ClCompile Include="..\Objects\boolobject.c" />
     <ClCompile Include="..\Objects\bytearrayobject.c" />
     <ClCompile Include="..\Objects\bytes_methods.c" />

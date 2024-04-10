@@ -17,6 +17,7 @@ PyAPI_DATA(PyTypeObject) PyCFunction_Type;
 #define PyCFunction_Check(op) PyObject_TypeCheck((op), &PyCFunction_Type)
 
 typedef PyObject *(*PyCFunction)(PyObject *, PyObject *);
+typedef PyObject *(*PyCFunctionAsync)(PyObject *, PyObject *, PyObject *);
 typedef PyObject *(*PyCFunctionFast) (PyObject *, PyObject *const *, Py_ssize_t);
 typedef PyObject *(*PyCFunctionWithKeywords)(PyObject *, PyObject *,
                                              PyObject *);
@@ -124,6 +125,7 @@ PyAPI_FUNC(PyObject *) PyCMethod_New(PyMethodDef *, PyObject *,
 #define METH_METHOD 0x0200
 #endif
 
+#define METH_ASYNC     0x0400
 
 #ifndef Py_LIMITED_API
 #  define Py_CPYTHON_METHODOBJECT_H

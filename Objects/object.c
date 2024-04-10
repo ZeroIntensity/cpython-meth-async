@@ -2195,6 +2195,7 @@ static PyTypeObject* static_types[] = {
 
     // Static types with base=&PyBaseObject_Type
     &PyAsyncGen_Type,
+    &PyAwaitable_Type,
     &PyByteArrayIter_Type,
     &PyByteArray_Type,
     &PyBytesIter_Type,

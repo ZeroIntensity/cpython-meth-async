@@ -496,6 +496,7 @@ PYTHON_OBJS=	\
 # Objects
 OBJECT_OBJS=	\
 		Objects/abstract.o \
+		Objects/awaitableobject.o \
 		Objects/boolobject.o \
 		Objects/bytes_methods.o \
 		Objects/bytearrayobject.o \
@@ -990,6 +991,7 @@ python.worker.js: $(srcdir)/Tools/wasm/python.worker.js
 PYTHON_HEADERS= \
 		$(srcdir)/Include/Python.h \
 		$(srcdir)/Include/abstract.h \
+		$(srcdir)/Include/awaitableobject.h \
 		$(srcdir)/Include/bltinmodule.h \
 		$(srcdir)/Include/boolobject.h \
 		$(srcdir)/Include/bytearrayobject.h \

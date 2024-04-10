@@ -47,10 +47,11 @@ PyCMethod_New(PyMethodDef *ml, PyObject *self, PyObject *module, PyTypeObject *c
     /* Figure out correct vectorcall function to use */
     vectorcallfunc vectorcall;
     switch (ml->ml_flags & (METH_VARARGS | METH_FASTCALL | METH_NOARGS |
-                            METH_O | METH_KEYWORDS | METH_METHOD))
+                            METH_O | METH_KEYWORDS | METH_METHOD | METH_ASYNC))
     {
         case METH_VARARGS:
         case METH_VARARGS | METH_KEYWORDS:
+        case METH_VARARGS | METH_ASYNC:
             /* For METH_VARARGS functions, it's more efficient to use tp_call
              * instead of vectorcall. */
             vectorcall = NULL;
@@ -548,7 +549,31 @@ cfunction_call(PyObject *func, PyObject *args, PyObject *kwargs)
                           ((PyCFunctionObject*)func)->m_ml->ml_name);
             return NULL;
         }
-        result = _PyCFunction_TrampolineCall(meth, self, args);
+
+        if (flags & METH_ASYNC) {
+            PyObject *awaitable = PyAwaitable_New();
+            if (awaitable == NULL)
+                return NULL;
+
+            result = _PyCFunctionAsync_TrampolineCall((*(PyCFunctionAsync)(void(*)(void))meth),
+                                                    self, awaitable, args);
+            PyObject *checked = _Py_CheckFunctionResult(tstate, func, result, NULL);
+
+            if (checked == NULL) {
+                Py_DECREF(awaitable);
+                return NULL;
+            }
+
+            if (PyAwaitable_SetResult(awaitable, checked) < 0) {
+                Py_DECREF(checked);
+                Py_DECREF(awaitable);
+                return NULL;
+            }
+
+            return awaitable;
+        } else {
+            result = _PyCFunction_TrampolineCall(meth, self, args);
+        }
     }
     return _Py_CheckFunctionResult(tstate, func, result, NULL);
 }

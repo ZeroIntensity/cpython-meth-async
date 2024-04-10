@@ -716,6 +716,8 @@ extern PyObject* _PyCFunctionWithKeywords_TrampolineCall(
 #else
 #define _PyCFunction_TrampolineCall(meth, self, args) \
     (meth)((self), (args))
+#define _PyCFunctionAsync_TrampolineCall(meth, self, awaitable, args) \
+    (meth)((self), (awaitable), (args))
 #define _PyCFunctionWithKeywords_TrampolineCall(meth, self, args, kw) \
     (meth)((self), (args), (kw))
 #endif // __EMSCRIPTEN__ && PY_CALL_TRAMPOLINE
