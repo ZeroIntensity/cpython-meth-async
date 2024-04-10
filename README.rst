@@ -1,5 +1,5 @@
-This is Python version 3.13.0 alpha 6
-=====================================
+``METH_ASYNC`` Prototype Implementation
+=======================================
 
 This fork is *only* for demonstrating a prototype of ``METH_ASYNC``. Run it as such:
 
