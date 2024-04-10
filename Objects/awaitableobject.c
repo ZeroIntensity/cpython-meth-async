@@ -30,8 +30,7 @@ struct _PyAwaitableObject {
 };
 
 typedef struct {
-    PyObject_HEAD
-    PyObject *gw_result;
+    PyObject_HEAD;
     PyAwaitableObject *gw_aw;
     PyObject *gw_current_await;
 } GenWrapperObject;
@@ -76,7 +75,6 @@ gen_new(PyTypeObject *tp, PyObject *args, PyObject *kwds)
     }
 
     GenWrapperObject *g = (GenWrapperObject *) self;
-    g->gw_result = NULL;
     g->gw_aw = NULL;
     g->gw_current_await = NULL;
 
@@ -89,7 +87,6 @@ gen_dealloc(PyObject *self)
     GenWrapperObject *g = (GenWrapperObject *) self;
     Py_XDECREF(g->gw_current_await);
     Py_XDECREF(g->gw_aw);
-    Py_XDECREF(g->gw_result);
     Py_TYPE(self)->tp_free(self);
 }
 
@@ -106,18 +103,6 @@ _PyAwaitable_GenWrapper_New(PyAwaitableObject *aw)
     if (g == NULL) return NULL;
     g->gw_aw = (PyAwaitableObject *) Py_NewRef((PyObject *) aw);
     return (PyObject *) g;
-}
-
-static void
-_PyAwaitable_GenWrapper_SetResult(PyObject *gen, PyObject *result)
-{
-    assert(gen != NULL);
-    assert(result != NULL);
-    Py_INCREF(gen);
-    GenWrapperObject *g = (GenWrapperObject *) gen;
-
-    g->gw_result = Py_NewRef(result);
-    Py_DECREF(gen);
 }
 
 static int
@@ -173,8 +158,8 @@ gen_next(PyObject *self)
     if (((aw->aw_state + 1) > aw->aw_callback_size) &&
         g->gw_current_await == NULL) {
         PyErr_SetObject(PyExc_StopIteration,
-                        g->gw_result ?
-                        g->gw_result :
+                        aw->aw_result ?
+                        aw->aw_result :
                         Py_None);
         return NULL;
     }
@@ -593,13 +578,10 @@ PyAwaitable_SetResult(PyObject *awaitable, PyObject *result)
     Py_INCREF(awaitable);
 
     PyAwaitableObject *aw = (PyAwaitableObject *) awaitable;
-    if (aw->aw_gen == NULL) {
-        PyErr_SetString(PyExc_TypeError, "no generator is currently present");
-        Py_DECREF(awaitable);
-        Py_DECREF(result);
-        return -1;
-    }
-    _PyAwaitable_GenWrapper_SetResult(aw->aw_gen, result);
+
+    Py_XDECREF(aw->aw_result);
+    aw->aw_result = Py_NewRef(result);
+
     Py_DECREF(awaitable);
     Py_DECREF(result);
     return 0;

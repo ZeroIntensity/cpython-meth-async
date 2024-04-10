@@ -2271,6 +2271,7 @@ static PyTypeObject* static_types[] = {
     &_PyAsyncGenASend_Type,
     &_PyAsyncGenAThrow_Type,
     &_PyAsyncGenWrappedValue_Type,
+    &_PyAwaitable_GenWrapper_Type,
     &_PyBufferWrapper_Type,
     &_PyContextTokenMissing_Type,
     &_PyCoroWrapper_Type,
