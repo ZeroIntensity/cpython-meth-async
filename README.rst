@@ -1,17 +1,18 @@
 This is Python version 3.13.0 alpha 6
 =====================================
 
-.. image:: https://github.com/python/cpython/workflows/Tests/badge.svg
-   :alt: CPython build status on GitHub Actions
-   :target: https://github.com/python/cpython/actions
+This fork is *only* for demonstrating a prototype of ``METH_ASYNC``. Run it as such:
 
-.. image:: https://dev.azure.com/python/cpython/_apis/build/status/Azure%20Pipelines%20CI?branchName=main
-   :alt: CPython build status on Azure DevOps
-   :target: https://dev.azure.com/python/cpython/_build/latest?definitionId=4&branchName=main
+::
 
-.. image:: https://img.shields.io/badge/discourse-join_chat-brightgreen.svg
-   :alt: Python Discourse chat
-   :target: https://discuss.python.org/
+    git clone https://github.com/ZeroIntensity/cpython-meth-async && cd cpython-meth-async
+    ./configure --with-pydebug && make -j
+    ./python -m venv .venv
+    source .venv/bin/activate
+    cd mod
+    pip install .
+    python3 test.py
+
 
 
 Copyright © 2001-2024 Python Software Foundation.  All rights reserved.
